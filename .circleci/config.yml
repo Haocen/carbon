@@ -90,6 +90,10 @@ jobs:
       - run:
           name: Publish canary packages
           command: |
+            if [ -n "$(git status --porcelain)" ]; then
+              echo "Our git status is not clean. Pulling generated commit from master";
+              git pull
+            fi
             echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
             yarn lerna publish --canary minor --dist-tag canary --no-push --no-git-tag-version --yes
 
